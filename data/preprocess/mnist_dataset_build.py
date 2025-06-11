@@ -1,4 +1,3 @@
-
 import os, json, glob
 from skimage import io
 from tqdm import tqdm
@@ -10,6 +9,7 @@ import h5py
 
 
 def build_MNIST_h5(data_dir, save_dir):
+    os.makedirs(save_dir, exist_ok=True)
     dataset = datasets.MNIST(root=data_dir, download=True, transform=None)
     test_dataset = datasets.MNIST(root=data_dir, download=True, train=False, transform=None)
     train_all_file = h5py.File(os.path.join(save_dir, 'train_MNIST.h5'), 'w')
@@ -373,7 +373,7 @@ def build_MNIST_fashionMNIST_font_h5(mnist_data_dir, fashion_mnist_data_dir, fon
 
 def build_h5_MNIST_unique_fashionMNIST_uniform_imbalanced(mnist_fashionmnist_data_dir, save_dir):
     os.makedirs(save_dir, exist_ok=True)
-    for i in range(5):
+    for i in range(10):
         original_file = h5py.File('{:s}/train_MNIST_unique_fashionMNIST_uniform_{:d}.h5'.format(mnist_fashionmnist_data_dir, i), 'r')
         train_file = h5py.File('{:s}/train_MNIST_unique_fashionMNIST_uniform_{:d}.h5'.format(save_dir, i), 'w')
         keys = list(original_file['images'].keys())
@@ -417,7 +417,7 @@ def extract_imgs(h5_file_path, save_path, max_num=1000):
 
 def print_labels():
     # h5_file = h5py.File('../MNIST_fashionMNIST_imbalanced/train_MNIST_unique_fashionMNIST_uniform_9.h5', 'r')
-    # h5_file = h5py.File('../MNIST_fashionMNIST_imbalanced/train_MNIST_fashionMNIST.h5', 'r')
+    h5_file = h5py.File('../MNIST_fashionMNIST_imbalanced/train_MNIST_fashionMNIST.h5', 'r')
     # h5_file = h5py.File('../MNIST_font/train_MNIST_and_font_uniform_0.h5', 'r')
     mnist_nums = np.zeros((10, 1))
     fashionmnist_nums = np.zeros((10, 1))
@@ -460,7 +460,7 @@ def print_labels():
 print_labels()
 
 
-# extract_imgs('../MNIST_fashionMNIST/train_MNIST_fashionMNIST.h5', '../MNIST_fashionMNIST/train_images', 500000)
+extract_imgs('../MNIST_fashionMNIST/train_MNIST_fashionMNIST.h5', '../MNIST_fashionMNIST/train_images', 500000)
 # extract_imgs('../Font/font_train_db_new.h5', '../Font/train_images', 500)
 
 

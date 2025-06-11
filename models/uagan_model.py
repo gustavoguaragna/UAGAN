@@ -92,10 +92,10 @@ class UAGANModel(BaseModel):
         if self.isTrain:
             print(self.netD[0])
             
-        self.onehot = torch.zeros(opt.n_class, opt.n_class)
-        self.onehot = self.onehot.scatter_(1, torch.arange(opt.n_class).view(opt.n_class, 1), 1).view(
+        self.onehot = torch.zeros(opt.n_class, opt.n_class).to(self.device)
+        self.onehot = self.onehot.scatter_(1, torch.arange(opt.n_class, device=self.device).view(opt.n_class, 1), 1).view(
             opt.n_class, opt.n_class, 1, 1)
-        self.fill = torch.zeros([opt.n_class, opt.n_class, opt.load_size, opt.load_size])
+        self.fill = torch.zeros([opt.n_class, opt.n_class, opt.load_size, opt.load_size]).to(self.device)
         for i in range(opt.n_class):
             self.fill[i, i, :, :] = 1
 
@@ -135,7 +135,7 @@ class UAGANModel(BaseModel):
         # --- generate one fake image for all discriminators --- #
         noise = torch.randn(self.real_A[0].size(0), self.opt.nz, 1, 1).to(self.device)
         self.rand_label = torch.randint(self.opt.n_class, (1, self.real_A[0].size(0))).squeeze().to(self.device)   # randomly generate the labels
-        onehot_label = self.onehot[self.rand_label].to(self.device)
+        onehot_label = self.onehot[self.rand_label]
         self.fake_B = self.netG(noise, onehot_label)  # label as onehot encoding in G
 
         self.fake_B_0 = self.fake_B[0:1]
