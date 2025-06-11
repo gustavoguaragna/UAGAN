@@ -2,9 +2,8 @@
 /data/MNIST/
 /data/CIFAR10/
 /data/fashionMNIST/
-/data/MNIST_*/
+/data/MNIST*/
 
-/checkpoints/
 /results/
 
 /.idea/
