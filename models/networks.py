@@ -156,6 +156,8 @@ def define_G(input_nz, output_nc, ngf, netG, norm='batch', use_dropout=False, in
         net = cDCGANResnetGenerator(input_nz, output_nc, ngf, nf_max=256, img_size=32, num_classes=num_classes)
     elif netG == 'DCGANResnet':
         net = DCGANResnetGenerator(input_nz, output_nc, ngf, nf_max=256, img_size=32)
+    elif netG == 'simple':
+        net = SimpleGenerator()
     else:
         raise NotImplementedError('Generator model name [%s] is not recognized' % netG)
     return init_net(net, init_type, init_gain, gpu_ids)
@@ -200,6 +202,8 @@ def define_D(input_nc, ndf, netD, n_layers_D=3, norm='batch', init_type='normal'
         net = cDCGANResnetDiscriminator(input_nc, ndf, nf_max=256, img_size=32, num_classes=num_classes)
     elif netD == 'DCGANResnet':
         net = DCGANResnetDiscriminator(input_nc, ndf, nf_max=256, img_size=32)
+    elif netD == 'simple':
+        net = SimpleDiscriminator()
     else:
         raise NotImplementedError('Discriminator model name [%s] is not recognized' % netD)
     return init_net(net, init_type, init_gain, gpu_ids)
@@ -396,6 +400,52 @@ class cDCGANDiscriminator(nn.Module):
         x = torch.sigmoid(self.conv4(x))
         return x
 
+class SimpleGenerator(nn.Module):
+    """Very simple GAN generator for CIFAR-10"""
+    def __init__(self, latent_dim=100, img_channels=3, img_size=32):
+        super(SimpleGenerator, self).__init__()
+        self.latent_dim = latent_dim
+        self.img_channels = img_channels
+        self.img_size = img_size
+        self.output_dim = img_channels * img_size * img_size
+
+        self.model = nn.Sequential(
+            nn.Linear(latent_dim, 256),
+            nn.ReLU(True),
+            nn.Linear(256, 512),
+            nn.ReLU(True),
+            nn.Linear(512, self.output_dim),
+            nn.Tanh()  # outputs in [-1,1]
+        )
+
+    def forward(self, z):
+        x = self.model(z)                  # (B, output_dim)
+        img = x.view(-1, self.img_channels, self.img_size, self.img_size)
+        return img
+
+
+class SimpleDiscriminator(nn.Module):
+    """Very simple GAN discriminator for CIFAR-10"""
+    def __init__(self, img_channels=3, img_size=32):
+        super(SimpleDiscriminator, self).__init__()
+        self.img_channels = img_channels
+        self.img_size = img_size
+        self.input_dim = img_channels * img_size * img_size
+
+        self.model = nn.Sequential(
+            nn.Flatten(),
+            nn.Linear(self.input_dim, 512),
+            nn.LeakyReLU(0.2, True),
+            nn.Linear(512, 256),
+            nn.LeakyReLU(0.2, True),
+            nn.Linear(256, 1),
+            nn.Sigmoid()  # outputs probability in [0,1]
+        )
+
+    def forward(self, img):
+        # img: (B, C, H, W)
+        validity = self.model(img)
+        return validity.view(-1)
 
 # ResNet-like block
 class ResNetBlock(nn.Module):

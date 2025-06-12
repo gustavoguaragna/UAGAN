@@ -189,30 +189,69 @@ class BaseModel(ABC):
         else:
             self.__patch_instance_norm_state_dict(state_dict, getattr(module, key), keys, i + 1)
 
-    def load_networks(self, epoch):
-        """Load all the networks from the disk.
+    # def load_networks(self, epoch):
+    #     """Load all the networks from the disk.
 
-        Parameters:
-            epoch (int) -- current epoch; used in the file name '%s_net_%s.pth' % (epoch, name)
-        """
+    #     Parameters:
+    #         epoch (int) -- current epoch; used in the file name '%s_net_%s.pth' % (epoch, name)
+    #     """
+    #     for name in self.model_names:
+    #         if isinstance(name, str):
+    #             load_filename = '%s_net_%s.pth' % (epoch, name)
+    #             load_path = os.path.join(self.save_dir, load_filename)
+    #             net = getattr(self, 'net' + name)
+    #             if isinstance(net, torch.nn.DataParallel):
+    #                 net = net.module
+    #             print('loading the model from %s' % load_path)
+    #             # if you are using PyTorch newer than 0.4 (e.g., built from
+    #             # GitHub source), you can remove str() on self.device
+    #             state_dict = torch.load(load_path, map_location=str(self.device))
+    #             if hasattr(state_dict, '_metadata'):
+    #                 del state_dict._metadata
+
+    #             # patch InstanceNorm checkpoints prior to 0.4
+    #             for key in list(state_dict.keys()):  # need to copy keys here because we mutate in loop
+    #                 self.__patch_instance_norm_state_dict(state_dict, net, key.split('.'))
+    #             net.load_state_dict(state_dict)
+
+    def load_networks(self, epoch):
         for name in self.model_names:
-            if isinstance(name, str):
-                load_filename = '%s_net_%s.pth' % (epoch, name)
-                load_path = os.path.join(self.save_dir, load_filename)
-                net = getattr(self, 'net' + name)
+            if not isinstance(name, str):
+                continue
+
+            # Build a pattern for how you saved it:
+            #   for a single-net case:  f"{epoch}_net_{name}.pth"
+            #   for a multi-net (list) case: f"{epoch}_net_{name}_{i}.pth"
+            net = getattr(self, 'net' + name)
+
+            if isinstance(net, list) or isinstance(net, torch.nn.ModuleList):
+                # you saved several files latest_net_D_0.pth … latest_net_D_9.pth
+                for i in range(len(net)):
+                    filename = f"{epoch}_net_{name}_{i}.pth"
+                    path = os.path.join(self.save_dir, filename)
+                    print(f"loading {path}")
+                    state_dict = torch.load(path, map_location=self.device)
+                    model_i = net[i]
+                    if isinstance(model_i, torch.nn.DataParallel):
+                        model_i = model_i.module
+                    model_i.load_state_dict(state_dict)
+            else:
+                # single-model case (generator)
+                filename = f"{epoch}_net_{name}.pth"
+                path = os.path.join(self.save_dir, filename)
+                print(f"loading {path}")
+                state_dict = torch.load(path, map_location=self.device)
+
+                # if hasattr(state_dict, '_metadata'):
+                #     del state_dict._metadata
+                # # patch InstanceNorm checkpoints prior to 0.4
+                # for key in list(state_dict.keys()):
+                #     self.__patch_instance_norm_state_dict(state_dict, net, key.split('.'))
+
                 if isinstance(net, torch.nn.DataParallel):
                     net = net.module
-                print('loading the model from %s' % load_path)
-                # if you are using PyTorch newer than 0.4 (e.g., built from
-                # GitHub source), you can remove str() on self.device
-                state_dict = torch.load(load_path, map_location=str(self.device))
-                if hasattr(state_dict, '_metadata'):
-                    del state_dict._metadata
-
-                # patch InstanceNorm checkpoints prior to 0.4
-                for key in list(state_dict.keys()):  # need to copy keys here because we mutate in loop
-                    self.__patch_instance_norm_state_dict(state_dict, net, key.split('.'))
                 net.load_state_dict(state_dict)
+
 
     def print_networks(self, verbose):
         """Print the total number of parameters in the network and (if verbose) network architecture

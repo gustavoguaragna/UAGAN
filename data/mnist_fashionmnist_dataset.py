@@ -39,6 +39,9 @@ class MNISTFashionMNISTDataset(BaseDataset):
         else:
             train_db = self.file
         self.image, self.label = self.build_pairs(train_db)
+
+        # self.image = self.image[:600]
+        # self.label = self.label[:600]
         # self.image, self.label, self.fine_label = self.build_pairs(train_db)
 
         # self.dir_AB = os.path.join(opt.dataroot, opt.phase)  # get the image directory

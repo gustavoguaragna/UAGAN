@@ -4,7 +4,7 @@
           checkpoints_dir: ./checkpoints                 
            continue_train: False                         
                 crop_size: 32                            
-                 dataroot: ./data/MNIST_fashionMNIST     	[default: None]
+                 dataroot: ./data/MNIST_fashionMNIST_imbalanced	[default: None]
              dataset_mode: mnist_fashionmnist_split      	[default: unaligned]
                 direction: AtoB                          
               display_env: main                          
@@ -38,11 +38,11 @@
                n_layers_D: 3                             
                      name: mnistUniqueFashionUniform_UAGAN_10D	[default: experiment_name]
                       ndf: 32                            	[default: 64]
-                     netD: cDCGANResnet                  
-                     netG: cDCGANResnet                  
+                     netD: cDCGAN                        	[default: cDCGANResnet]
+                     netG: cDCGAN                        	[default: cDCGANResnet]
                       ngf: 32                            	[default: 64]
-                    niter: 2                             	[default: 100]
-              niter_decay: 2                             	[default: 100]
+                    niter: 300                           	[default: 100]
+              niter_decay: 300                           	[default: 100]
                no_dropout: False                         
                   no_flip: False                         
                   no_html: False                         
