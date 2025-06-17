@@ -2380,3 +2380,7 @@
 (epoch: 328, iters: 1600, time: 0.013, data: 0.130) G_GAN_all: 0.257 D_real_all: 1.697 D_fake_all: 3.454 
 (epoch: 328, iters: 3200, time: 0.013, data: 0.168) G_GAN_all: 0.265 D_real_all: 1.950 D_fake_all: 3.733 
 (epoch: 328, iters: 4800, time: 0.013, data: 0.158) G_GAN_all: 0.256 D_real_all: 1.683 D_fake_all: 3.636 
+================ Training Loss (Fri Jun 13 13:23:04 2025) ================
+================ Training Loss (Mon Jun 16 07:46:15 2025) ================
+================ Training Loss (Mon Jun 16 07:50:18 2025) ================
+================ Training Loss (Mon Jun 16 10:12:09 2025) ================

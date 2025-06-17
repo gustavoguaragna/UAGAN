@@ -124,7 +124,7 @@ class UAGANModel(BaseModel):
 
             if len(self.weights) == 0:
                 self.weights = input['weights'][0].to(self.device).float()
-                print(self.weights)
+                #### print(self.weights)
         else:
             self.real_A = input['A'].to(self.device)
             self.real_B = input['B'].to(self.device)

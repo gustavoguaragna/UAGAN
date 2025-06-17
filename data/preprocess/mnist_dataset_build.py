@@ -439,7 +439,7 @@ def print_labels():
     # print(fashionmnist_nums / np.sum(fashionmnist_nums))
 
 
-# build_MNIST_h5('../MNIST', '../MNSIT')
+# build_MNIST_h5('../MNIST', '../MNIST')
 # build_MNIST_fashionMNIST_h5('../MNIST', '../fashionMNIST', '../MNIST_fashionMNIST', mode='train')
 # build_MNIST_fashionMNIST_h5('../MNIST', '../fashionMNIST', '../MNIST_fashionMNIST', mode='test')
 # build_h5_MNIST_unique_fashionMNIST_uniform('../MNIST', '../fashionMNIST', '../MNIST_fashionMNIST')
@@ -457,10 +457,10 @@ def print_labels():
 # build_MNIST_font_h5('../MNIST', '../Font', 'MNIST_font_new', 'test')
 # build_h5_MNIST_unique_font_uniform('../MNIST', '../Font', '../MNIST_font_new')
 # build_h5_MNIST_and_font_uniform('../MNIST', '../Font', '../MNIST_font_new')
-print_labels()
+# print_labels()
 
 
-extract_imgs('../MNIST_fashionMNIST/train_MNIST_fashionMNIST.h5', '../MNIST_fashionMNIST/train_images', 500000)
+# extract_imgs('../MNIST_fashionMNIST/train_MNIST_fashionMNIST.h5', '../MNIST_fashionMNIST/train_images', 500000)
 # extract_imgs('../Font/font_train_db_new.h5', '../Font/train_images', 500)
 
 

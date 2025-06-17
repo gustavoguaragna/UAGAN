@@ -1,8 +1,8 @@
 
 
 # ----- MNIST + fashionMNIST, non-identical case, 10 discriminators -----
-python train.py --dataroot ./data/MNIST_fashionMNIST --name mnistUniqueFashionUniform_UAGAN_10D --model uagan --netG cDCGANResnet --netD cDCGANResnet \
-  --direction AtoB --dataset_mode mnist_fashionmnist_split --pool_size 0 --gpu_ids 0,1 --niter 200 --niter_decay 200 --batch_size 256 \
+python train.py --dataroot ./data/MNIST_fashionMNIST_imbalanced --name mnistUniqueFashionUniform_UAGAN_10D --model uagan --netG cDCGANResnet --netD cDCGANResnet \
+  --direction AtoB --dataset_mode mnist_fashionmnist_split --pool_size 0 --gpu_ids -1 --niter 200 --niter_decay 200 --batch_size 256 \
   --output_nc 1 --num_threads 0 --n_class 10 --ngf 64 --ndf 64 --nz 128
 
 

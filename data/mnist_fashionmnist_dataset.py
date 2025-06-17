@@ -20,12 +20,15 @@ class MNISTFashionMNISTDataset(BaseDataset):
         Parameters:
             opt (Option class) -- stores all the experiment flags; needs to be a subclass of BaseOptions
         """
-
-        if idx is None:
-            h5_name = "train_MNIST_fashionMNIST.h5"
+        if opt.isTrain:
+            print(opt.isTrain)
+            if idx is None:
+                h5_name = "train_MNIST_fashionMNIST.h5"
+            else:
+                h5_name = 'train_MNIST_unique_fashionMNIST_uniform_{:d}.h5'.format(idx)
+                # h5_name = 'train_MNIST_and_fashionMNIST_uniform_{:d}.h5'.format(idx)
         else:
-            h5_name = 'train_MNIST_unique_fashionMNIST_uniform_{:d}.h5'.format(idx)
-            # h5_name = 'train_MNIST_and_fashionMNIST_uniform_{:d}.h5'.format(idx)
+            h5_name = "test_MNIST_fashionMNIST.h5"
 
 
         print(f"Load: {h5_name}")
