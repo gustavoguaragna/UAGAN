@@ -1,11 +1,11 @@
 ----------------- Options ---------------
-               batch_size: 256                           	[default: 1]
+               batch_size: 64                            	[default: 1]
                     beta1: 0.5                           
           checkpoints_dir: ./checkpoints                 
-           continue_train: False                         
+           continue_train: True                          	[default: False]
                 crop_size: 32                            
-                 dataroot: ./data                        	[default: None]
-             dataset_mode: mnist_fashionmnist            	[default: unaligned]
+                 dataroot: ./data/MNIST_fashionMNIST_imbalanced	[default: None]
+             dataset_mode: mnist_fashionmnist_split      	[default: unaligned]
                 direction: AtoB                          
               display_env: main                          
              display_freq: 400                           
@@ -17,7 +17,7 @@
                     epoch: latest                        
               epoch_count: 1                             
                  gan_mode: bce                           
-                  gpu_ids: -1                            	[default: 0]
+                  gpu_ids: 0                             
                 init_gain: 0.02                          
                 init_type: normal                        
                  input_nc: 3                             
@@ -37,12 +37,12 @@
                   n_class: 10                            
                n_layers_D: 3                             
                      name: mnistUniqueFashionUniform_UAGAN_10D	[default: experiment_name]
-                      ndf: 64                            
-                     netD: cDCGANResnet                  
-                     netG: cDCGANResnet                  
-                      ngf: 64                            
-                    niter: 100                           
-              niter_decay: 100                           
+                      ndf: 32                            	[default: 64]
+                     netD: cDCGAN                        	[default: cDCGANResnet]
+                     netG: cDCGAN                        	[default: cDCGANResnet]
+                      ngf: 32                            	[default: 64]
+                    niter: 200                           	[default: 100]
+              niter_decay: 200                           	[default: 100]
                no_dropout: False                         
                   no_flip: False                         
                   no_html: False                         
@@ -57,7 +57,7 @@
              save_by_iter: False                         
           save_epoch_freq: 50                            
          save_latest_freq: 5000                          
-           serial_batches: True                          	[default: False]
+           serial_batches: False                         
                    suffix:                               
        take_model_average: False                         
          update_html_freq: 1000                          
