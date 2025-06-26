@@ -17,7 +17,7 @@
                     epoch: latest                        
               epoch_count: 1                             
                  gan_mode: bce                           
-                  gpu_ids: -1                            	[default: 0]
+                  gpu_ids: 0                             
                 init_gain: 0.02                          
                 init_type: normal                        
                  input_nc: 3                             
@@ -37,10 +37,10 @@
                   n_class: 10                            
                n_layers_D: 3                             
                      name: mnistUniqueFashionUniform_UAGAN_10D	[default: experiment_name]
-                      ndf: 64                            
-                     netD: cDCGANResnet                  
-                     netG: cDCGANResnet                  
-                      ngf: 64                            
+                      ndf: 32                            	[default: 64]
+                     netD: cDCGAN                        	[default: cDCGANResnet]
+                     netG: cDCGAN                        	[default: cDCGANResnet]
+                      ngf: 32                            	[default: 64]
                     niter: 200                           	[default: 100]
               niter_decay: 200                           	[default: 100]
                no_dropout: False                         
